@@ -1,4 +1,5 @@
 rvm:
   - 2.0.0
 
-script: "scripts/travis.sh"
+before_script: "scripts/ci_env.sh"
+script: "rake spec"
