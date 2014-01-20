@@ -9,8 +9,9 @@ describe Vx::ContainerConnector::Docker do
 
   context "container_options" do
     subject { conn.container_options }
-    it { should eq("Cmd"       => ["/sbin/init", "--startup-event", "dockerboot"],
-                   "Image"     => "dmexe/precise") }
+    it { should eq("Cmd"        => ["/sbin/init", "--startup-event", "dockerboot"],
+                   "Image"      => "dmexe/precise",
+                   "Privileged" => true) }
   end
 
   context "user" do
