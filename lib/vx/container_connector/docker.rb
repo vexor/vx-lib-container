@@ -50,9 +50,8 @@ module Vx
 
       def container_options
         self.class.default_container_options.merge(
-          'Cmd'        => init,
-          'Image'      => image,
-          'Privileged' => true
+          'Cmd'       => init,
+          'Image'     => image,
         )
       end
 
