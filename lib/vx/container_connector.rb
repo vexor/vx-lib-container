@@ -4,8 +4,10 @@ require File.expand_path("../container_connector/errors",  __FILE__)
 module Vx
   module ContainerConnector
 
-    autoload :Local,  File.expand_path("../container_connector/local",  __FILE__)
-    autoload :Docker, File.expand_path("../container_connector/docker", __FILE__)
+    autoload :Local,     File.expand_path("../container_connector/local",  __FILE__)
+    autoload :Docker,    File.expand_path("../container_connector/docker", __FILE__)
+    autoload :Retriable, File.expand_path("../container_connector/mixin/retriable", __FILE__)
+
 
     extend self
 
