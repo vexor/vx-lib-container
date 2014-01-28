@@ -94,8 +94,8 @@ module Vx
             sleep 3
             yield container
           ensure
-            container.stop
-            logger.info "stop container #{container.id}"
+            container.kill
+            logger.info "kill container #{container.id}"
           end
         end
 
