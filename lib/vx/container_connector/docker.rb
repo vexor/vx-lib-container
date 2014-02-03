@@ -10,6 +10,7 @@ module Vx
       autoload :Spawner, File.expand_path("../docker/spawner", __FILE__)
 
       include Vx::Common::Spawn
+      include ContainerConnector::Retriable
 
       attr_reader :user, :password, :init, :image, :remote_dir, :logger
 
