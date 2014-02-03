@@ -1,6 +1,7 @@
 require 'docker'
 require 'logger'
 require 'vx/common/spawn'
+require 'net/ssh'
 
 module Vx
   module ContainerConnector
