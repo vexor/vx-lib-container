@@ -67,27 +67,20 @@ module Vx
             forward_agent: false
           }
           logger.info "open ssh session to #{user}@#{host}"
-          attempts = 0
-          begin
+          with_retries ::Net::SSH::AuthenticationFailed, limit: 3, sleep: 3 do
             open_ssh(host, user, ssh_options) do |ssh|
               logger.info "ssh session opened"
               yield Spawner.new(container, ssh, remote_dir)
-            end
-          rescue ::Net::SSH::AuthenticationFailed => e
-            logger.error "got #{e.inspect}, retry #{attempts}"
-            sleep 0.5
-            attempts += 1
-            if attempts > 5
-              raise e
-            else
-              retry
             end
           end
         end
 
         def start_container(&block)
           container = ::Docker::Container.create container_options
-          container.start
+
+          with_retries ::Docker::Error::NotFoundError, limit: 3, sleep: 3 do
+            container.start
+          end
 
           begin
             logger.info "start container #{container.id}"

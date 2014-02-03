@@ -26,6 +26,7 @@ module Vx
         begin
           yield
         rescue *exceptions => e
+          $stderr.puts "got: #{inspect}, attempt #{retried}"
           if retried + 1 < options[:limit]
             retried += 1
             sleep options[:sleep]
