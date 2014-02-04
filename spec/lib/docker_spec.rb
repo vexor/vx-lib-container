@@ -5,14 +5,6 @@ describe Vx::ContainerConnector::Docker do
 
   it { should be }
 
-  its(:logger)   { should be }
-
-  context "container_options" do
-    subject { conn.container_options }
-    it { should eq("Cmd"       => ["/sbin/init", "--startup-event", "dockerboot"],
-                   "Image"     => "dmexe/precise") }
-  end
-
   context "user" do
     subject { conn.user }
 

@@ -8,7 +8,7 @@ describe Vx::ContainerConnector::Local do
 
   context "work_dir" do
     it "by default should be inside Dir.tmpdir" do
-      expect(conn.work_dir).to eq("#{Dir.tmpdir}/.local_connector")
+      expect(conn.work_dir).to eq("#{Dir.tmpdir}/.vx_local_connector")
     end
 
     it "when passed via options, should be" do
@@ -37,7 +37,7 @@ describe Vx::ContainerConnector::Local do
           end
         end
 
-        dir = "#{Dir.tmpdir}/.local_connector\n"
+        dir = "#{Dir.tmpdir}/.vx_local_connector\n"
         if RUBY_PLATFORM =~ /darwin/
           dir.gsub!(/^\/var/, '/private/var')
         end
