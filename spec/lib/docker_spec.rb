@@ -73,7 +73,7 @@ describe Vx::ContainerConnector::Docker do
           end
         end
 
-        expect(rs).to eq "/home/vexor\n"
+        expect(rs).to eq "/home/vexor\r\n"
         expect(code).to eq 0
       end
 

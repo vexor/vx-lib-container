@@ -17,7 +17,7 @@ module Vx
           options = args.last.is_a?(Hash)  ? args.pop   : {}
           cmd     = args
 
-          options.merge!(chdir: work_dir)
+          options.merge!(chdir: work_dir, pty: true)
 
           ssh.spawn(env, cmd, options, &logger)
         end
