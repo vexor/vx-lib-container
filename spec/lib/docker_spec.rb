@@ -32,8 +32,8 @@ describe Vx::ContainerConnector::Docker do
   context "image" do
     subject { conn.image }
 
-    it "by default should eq 'dmexe/precise'" do
-      expect(subject).to eq 'dmexe/precise'
+    it "by default should eq 'dmexe/vexor-recise-full'" do
+      expect(subject).to eq 'dmexe/vexor-precise-full'
     end
 
     it "when passed via options should be" do
