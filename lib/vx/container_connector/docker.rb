@@ -20,7 +20,7 @@ module Vx
         @user       = options[:user]       || "vexor"
         @password   = options[:password]   || "vexor"
         @init       = options[:init]       || %w{ /sbin/init --startup-event dockerboot }
-        @image      = options[:image]      || "dmexe/precise"
+        @image      = options[:image]      || "dmexe/vexor-precise-full"
         @remote_dir = options[:remote_dir] || "/home/#{user}"
       end
 
