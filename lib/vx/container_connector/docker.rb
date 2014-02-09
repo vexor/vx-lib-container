@@ -59,7 +59,7 @@ module Vx
             ssh_host:       host
           }
 
-          with_retries ::Net::SSH::AuthenticationFailed, limit: 3, sleep: 3 do
+          with_retries ::Net::SSH::AuthenticationFailed, Errno::ECONNREFUSED, limit: 3, sleep: 3 do
             instrument("starting_ssh_session", instrumentation)
             open_ssh(host, user, ssh_options) do |ssh|
               yield Spawner.new(container, ssh, remote_dir)
