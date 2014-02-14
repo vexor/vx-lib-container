@@ -1,4 +1,5 @@
 require 'docker'
+require 'excon'
 require 'vx/common/spawn'
 require 'net/ssh'
 
@@ -78,7 +79,7 @@ module Vx
             container_options: start_container_options,
           }
 
-          with_retries ::Docker::Error::NotFoundError, limit: 3, sleep: 3 do
+          with_retries ::Docker::Error::NotFoundError, Excon::Errors::SocketError, limit: 3, sleep: 3 do
             instrument("start_container", instrumentation) do
               container.start start_container_options
             end
