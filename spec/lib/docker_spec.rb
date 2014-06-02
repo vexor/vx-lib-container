@@ -54,6 +54,9 @@ describe Vx::ContainerConnector::Docker do
   end
 
   context "start container", docker: true do
+
+    let(:conn) { described_class.new image: "dmexe/vexor-precise" }
+
     it 'should be successfuly' do
       rs = nil
       conn.start do |spawner|
