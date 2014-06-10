@@ -60,7 +60,7 @@ module Vx
             ssh_host:       host
           }
 
-          with_retries ::Net::SSH::AuthenticationFailed, Errno::ECONNREFUSED, Errno::ETIMEDOUT, limit: 10, sleep: 5 do
+          with_retries ::Net::SSH::AuthenticationFailed, Errno::ECONNREFUSED, Errno::ETIMEDOUT, limit: 20, sleep: 1 do
             instrument("starting_ssh_session", instrumentation)
             open_ssh(host, user, ssh_options) do |ssh|
               yield Spawner.new(container, ssh, remote_dir)
@@ -79,14 +79,11 @@ module Vx
             container_options: start_container_options,
           }
 
-          with_retries ::Docker::Error::NotFoundError, Excon::Errors::SocketError, limit: 3, sleep: 3 do
-            instrument("start_container", instrumentation) do
-              container.start start_container_options
-            end
+          instrument("start_container", instrumentation) do
+            container.start start_container_options
           end
 
           begin
-            sleep 3
             yield container
           ensure
             instrument("kill_container", instrumentation) do
