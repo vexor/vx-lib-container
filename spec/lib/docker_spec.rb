@@ -32,8 +32,8 @@ describe Vx::ContainerConnector::Docker do
   context "image" do
     subject { conn.image }
 
-    it "by default should eq 'dmexe/vexor-recise-full'" do
-      expect(subject).to eq 'dmexe/vexor-precise-full'
+    it "by default should eq 'dmexe/vexor-trusty-full'" do
+      expect(subject).to eq 'dmexe/vexor-trusty-full'
     end
 
     it "when passed via options should be" do
@@ -45,7 +45,7 @@ describe Vx::ContainerConnector::Docker do
     subject { conn.init }
 
     it "by default should be" do
-      expect(subject).to eq ["/sbin/init", "--startup-event", "dockerboot"]
+      expect(subject).to eq ["/sbin/my_init"]
     end
 
     it "when passed via options should be" do
