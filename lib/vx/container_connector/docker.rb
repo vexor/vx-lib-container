@@ -21,7 +21,7 @@ module Vx
         @user       = options[:user]       || "vexor"
         @password   = options[:password]   || "vexor"
         @init       = options[:init]       || %w{ /sbin/my_init }
-        @image      = options[:image]      || "dmexe/vexor-trusty-full"
+        @image      = options[:image]      || "ubuntu"
         @remote_dir = options[:remote_dir] || "/home/#{user}"
       end
 
@@ -88,6 +88,7 @@ module Vx
           ensure
             instrument("kill_container", instrumentation) do
               container.kill
+
             end
           end
         end

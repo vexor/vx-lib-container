@@ -32,10 +32,6 @@ describe Vx::ContainerConnector::Docker do
   context "image" do
     subject { conn.image }
 
-    it "by default should eq 'dmexe/vexor-trusty-full'" do
-      expect(subject).to eq 'dmexe/vexor-trusty-full'
-    end
-
     it "when passed via options should be" do
       expect(described_class.new(image: "image").image).to eq 'image'
     end
@@ -55,7 +51,7 @@ describe Vx::ContainerConnector::Docker do
 
   context "start container", docker: true do
 
-    let(:conn) { described_class.new image: "dmexe/vexor-precise" }
+    let(:conn) { described_class.new image: "vexor/trusty:1.0.0" }
 
     it 'should be successfuly' do
       rs = nil
