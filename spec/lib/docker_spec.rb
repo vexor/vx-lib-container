@@ -51,9 +51,18 @@ describe Vx::ContainerConnector::Docker do
 
   context "start container", docker: true do
 
-    let(:conn) { described_class.new image: "vexor/trusty:1.0.0" }
+    let(:conn) { described_class.new image: "ubuntu", init: "/bin/sleep 1" }
 
     it 'should be successfuly' do
+      rs = nil
+      conn.start do |spawner|
+        rs = spawner.id
+      end
+      expect(rs).to_not be_empty
+    end
+
+    it 'should be successfuly with memory limit' do
+      conn = described_class.new memory: 1024 * 1024 * 10, init: "/bin/sleep 1", image: 'ubuntu'
       rs = nil
       conn.start do |spawner|
         rs = spawner.id
