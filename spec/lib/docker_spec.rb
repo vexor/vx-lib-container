@@ -62,7 +62,7 @@ describe Vx::ContainerConnector::Docker do
     end
 
     it 'should be successfuly with memory limit' do
-      conn = described_class.new memory: 1024 * 1024 * 10, init: "/bin/sleep 1", image: 'ubuntu'
+      conn = described_class.new memory: 1024 * 1024 * 10, memory_swap: 1024 * 1024 * 20, init: "/bin/sleep 1", image: 'ubuntu'
       rs = nil
       conn.start do |spawner|
         rs = spawner.id
