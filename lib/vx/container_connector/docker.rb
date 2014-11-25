@@ -92,7 +92,7 @@ module Vx
           ensure
             instrument("kill_container", instrumentation) do
               container.kill
-
+              container.remove
             end
           end
         end
