@@ -1,25 +1,32 @@
+require 'vx/lib/spawn'
+
 module Vx
   module ContainerConnector
 
     class Docker
 
       class Spawner
-        attr_reader :container, :ssh, :work_dir
 
-        def initialize(container, ssh, work_dir)
+        include Vx::Lib::Spawn
+
+        attr_reader :container, :user, :chdir
+
+        def initialize(container, options)
           @container  = container
-          @ssh        = ssh
-          @work_dir   = work_dir
+          @user       = options[:user]
+          @chdir      = options[:chdir]
         end
 
-        def spawn(*args, &logger)
-          env     = args.first.is_a?(Hash) ? args.shift : {}
-          options = args.last.is_a?(Hash)  ? args.pop   : {}
-          cmd     = args
+        def spawn(command, options = {})
+          options[:stdin] ||= StringIO.new("")
+          options.merge!(pty: true)
+          #pid = container.json['State']['Pid']
 
-          options.merge!(chdir: work_dir, pty: true)
+          #nsenter = "nsenter --target #{pid} -F --mount --uts --ipc --net --pid"
+          #command = "#{nsenter} -- su '#{user} -c \"#{command}\"'"
+          command = "docker exec -t #{container.id} env -i su #{user} -c 'cd #{chdir} ; #{command}'"
 
-          ssh.spawn(env, cmd, options, &logger)
+          super(command, options){|re| yield re }
         end
 
         def id

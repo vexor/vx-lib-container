@@ -8,24 +8,12 @@ describe Vx::ContainerConnector::Docker do
   context "user" do
     subject { conn.user }
 
-    it "by default should eq 'vexor'" do
-      expect(subject).to eq 'vexor'
+    it "by default should eq 'root'" do
+      expect(subject).to eq 'root'
     end
 
     it "when passed via options should be" do
       expect(described_class.new(user: "user").user).to eq 'user'
-    end
-  end
-
-  context "password" do
-    subject { conn.password }
-
-    it "by default should eq 'vexor'" do
-      expect(subject).to eq 'vexor'
-    end
-
-    it "when passed via options should be" do
-      expect(described_class.new(password: "pass").password).to eq 'pass'
     end
   end
 
@@ -41,7 +29,7 @@ describe Vx::ContainerConnector::Docker do
     subject { conn.init }
 
     it "by default should be" do
-      expect(subject).to eq ["/sbin/my_init"]
+      expect(subject).to eq "/sbin/init"
     end
 
     it "when passed via options should be" do
@@ -51,7 +39,7 @@ describe Vx::ContainerConnector::Docker do
 
   context "start container", docker: true do
 
-    let(:conn) { described_class.new image: "ubuntu", init: "/bin/sleep 1" }
+    let(:conn) { described_class.new }
 
     it 'should be successfuly' do
       rs = nil
@@ -62,7 +50,7 @@ describe Vx::ContainerConnector::Docker do
     end
 
     it 'should be successfuly with memory limit' do
-      conn = described_class.new memory: 1024 * 1024 * 10, memory_swap: 1024 * 1024 * 20, init: "/bin/sleep 1", image: 'ubuntu'
+      conn = described_class.new memory: 1024 * 1024 * 10, memory_swap: 1024 * 1024 * 20
       rs = nil
       conn.start do |spawner|
         rs = spawner.id
@@ -81,7 +69,7 @@ describe Vx::ContainerConnector::Docker do
           end
         end
 
-        expect(rs).to eq "/home/vexor\r\n"
+        expect(rs).to eq "/\r\n"
         expect(code).to eq 0
       end
 

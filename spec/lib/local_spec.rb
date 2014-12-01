@@ -6,16 +6,6 @@ describe Vx::ContainerConnector::Local do
 
   it { should be }
 
-  context "work_dir" do
-    it "by default should be inside Dir.tmpdir" do
-      expect(conn.work_dir).to eq("#{Dir.tmpdir}/.vx_local_connector")
-    end
-
-    it "when passed via options, should be" do
-      expect(described_class.new(work_dir: "/tmp").work_dir).to eq '/tmp'
-    end
-  end
-
   context "start container" do
 
     it "spawner id should eq local" do
@@ -32,17 +22,12 @@ describe Vx::ContainerConnector::Local do
         code = nil
 
         conn.start do |spawner|
-          code = spawner.spawn("echo $PWD") do |out|
+          code = spawner.spawn("echo $USER") do |out|
             rs << out
           end
         end
 
-        dir = "#{Dir.tmpdir}/.vx_local_connector\n"
-        if RUBY_PLATFORM =~ /darwin/
-          dir.gsub!(/^\/var/, '/private/var')
-        end
-
-        expect(rs).to eq dir
+        expect(rs).to eq ENV['USER'] + "\n"
         expect(code).to eq 0
       end
 
