@@ -10,10 +10,10 @@ module Vx
           include Lib::Shell
           include Lib::Container::Upload
 
-          def exec(script, &logger)
+          def exec(script, options = {}, &logger)
             Dir.chdir work_dir do
-              sh.exec upload(script, "~/build.sh", mode: '0755')
-              sh.exec("~/build.sh", home: work_dir, &logger)
+              sh.exec upload(script, "~/build.sh", mode: '0755'), options.merge(home: work_dir)
+              sh.exec("~/build.sh", options.merge(home: work_dir), &logger)
             end
           end
 

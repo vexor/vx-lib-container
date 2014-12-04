@@ -9,9 +9,13 @@ module Vx ; module Lib ; module Container ;
       include Lib::Shell
       include Lib::Container::Upload
 
-      def exec(script, &logger)
-        sh(:ssh, ssh).exec upload(script, "~/build.sh", mode: '0755', &logger)
-        sh(:ssh, ssh).exec("~/build.sh", &logger)
+      def exec(script, options = {}, &logger)
+        sh(:ssh, ssh).exec upload(script, "~/build.sh", mode: '0755', &logger), options
+        sh(:ssh, ssh).exec("~/build.sh", options, &logger)
+      end
+
+      def work_dir
+        "~/"
       end
 
       def id
