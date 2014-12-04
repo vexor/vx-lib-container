@@ -1,7 +1,7 @@
 Bundler.require(:test)
 
-ENV['VX_ENV']     = 'test'
-ENV['DOCKER_URL'] = "tcp://localhost:2375"
+#ENV['VX_ENV']     = 'test'
+#ENV['DOCKER_URL'] = "tcp://localhost:2375"
 
 require File.expand_path '../../lib/vx/lib/container', __FILE__
 require 'rspec/autorun'

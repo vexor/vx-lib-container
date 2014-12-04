@@ -1,5 +1,6 @@
 require 'docker'
 require 'excon'
+require 'timeout'
 require 'net/ssh'
 require 'vx/lib/shell'
 
@@ -21,7 +22,7 @@ module Vx
           @user        = options[:user]        || "vexor"
           @password    = options[:password]    || "vexor"
           @init        = options[:init]        || %w{ /sbin/my_init }
-          @image       = options[:image]       || "ubuntu"
+          @image       = options[:image]       || "vexor/trusty:2.0.1"
           @memory      = options[:memory].to_i
           @memory_swap = options[:memory_swap].to_i
         end
@@ -50,7 +51,8 @@ module Vx
               password:      password,
               port:          22,
               paranoid:      false,
-              forward_agent: false
+              forward_agent: false,
+              timeout:       3,
             }
 
             instrumentation = {
@@ -59,12 +61,15 @@ module Vx
               ssh_options:    ssh_options.merge(host: host, user: user)
             }
 
-            with_retries ::Net::SSH::AuthenticationFailed, Errno::ECONNREFUSED, Errno::ETIMEDOUT, limit: 20, sleep: 1 do
-              ssh = instrument("start_ssh_session", instrumentation) do
+            ssh = with_retries ::Net::SSH::AuthenticationFailed, ::Errno::ECONNREFUSED, ::Errno::ETIMEDOUT, ::Timeout::Error, limit: 5, sleep: 3 do
+              instrument("start_ssh_session", instrumentation) do
                 ::Net::SSH.start host, user, ssh_options
               end
-              yield Spawner.new(container, ssh)
             end
+
+            re = yield Spawner.new(container, ssh)
+            ssh.shutdown!
+            re
           end
 
           def start_container(&block)
@@ -73,13 +78,12 @@ module Vx
             end
 
             instrumentation = {
-              container_type:    "docker",
-              container:         container.json,
-              container_options: start_container_options,
+              container_type: "docker",
+              container:      container.json
             }
 
             instrument("start", instrumentation) do
-              container.start start_container_options
+              container.start
             end
 
             begin

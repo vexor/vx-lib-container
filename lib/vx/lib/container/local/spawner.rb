@@ -7,11 +7,13 @@ module Vx
 
       class Local
         Spawner = Struct.new(:work_dir) do
-          include Vx::Lib::Shell
+          include Lib::Shell
+          include Lib::Container::Upload
 
-          def exec(stdin, &logger)
+          def exec(script, &logger)
             Dir.chdir work_dir do
-              sh.exec(stdin: StringIO.new(stdin), &logger)
+              sh.exec upload(script, "~/build.sh", mode: '0755')
+              sh.exec("~/build.sh", &logger)
             end
           end
 

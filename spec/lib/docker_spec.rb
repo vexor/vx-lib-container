@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Vx::ContainerConnector::Docker do
+describe Vx::Lib::Container::Docker do
   let(:conn) { described_class.new }
 
   it { should be }
@@ -51,22 +51,24 @@ describe Vx::ContainerConnector::Docker do
 
   context "start container", docker: true do
 
-    let(:conn) { described_class.new image: "ubuntu", init: "/bin/sleep 1" }
+    let(:conn) { described_class.new }
 
     it 'should be successfuly' do
       rs = nil
-      conn.start do |spawner|
-        rs = spawner.id
+      conn.start do |sh|
+        rs = sh.id
       end
       expect(rs).to_not be_empty
     end
 
     it 'should be successfuly with memory limit' do
-      conn = described_class.new memory: 1024 * 1024 * 10, memory_swap: 1024 * 1024 * 20, init: "/bin/sleep 1", image: 'ubuntu'
+      gb = 1024 * 1024 * 1024
+      conn = described_class.new memory: gb, memory_swap: 2 * gb
       rs = nil
-      conn.start do |spawner|
-        rs = spawner.id
+      conn.start do |sh|
+        rs = sh.id
       end
+
       expect(rs).to_not be_empty
     end
 
@@ -75,8 +77,8 @@ describe Vx::ContainerConnector::Docker do
         rs   = ""
         code = nil
 
-        conn.start do |spawner|
-          code = spawner.spawn("echo $PWD") do |out|
+        conn.start do |sh|
+          code = sh.exec("pwd") do |out|
             rs << out
           end
         end
@@ -88,8 +90,8 @@ describe Vx::ContainerConnector::Docker do
       it "failed" do
         code = nil
         rs   = ""
-        conn.start do |spawner|
-          code = spawner.spawn('ls /notexists') do |out|
+        conn.start do |sh|
+          code = sh.exec('ls /notexists ; exit') do |out|
             rs << out
           end
         end

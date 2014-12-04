@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_runtime_dependency 'docker-api',   '= 1.16.1'
-  spec.add_runtime_dependency 'vx-lib-shell', '= 0.1.2'
+  spec.add_runtime_dependency 'vx-lib-shell', '= 0.1.3'
 
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
