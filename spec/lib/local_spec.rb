@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Vx::ContainerConnector::Local do
+describe Vx::Lib::Container::Local do
   let(:conn) { described_class.new }
   subject { conn }
 
@@ -8,7 +8,7 @@ describe Vx::ContainerConnector::Local do
 
   context "work_dir" do
     it "by default should be inside Dir.tmpdir" do
-      expect(conn.work_dir).to eq("#{Dir.tmpdir}/.vx_local_connector")
+      expect(conn.work_dir).to eq("#{Dir.tmpdir}/vx_lib_container_#{Process.pid}")
     end
 
     it "when passed via options, should be" do
@@ -20,10 +20,10 @@ describe Vx::ContainerConnector::Local do
 
     it "spawner id should eq local" do
       rs = nil
-      conn.start do |spawner|
-        rs = spawner.id
+      conn.start do |sh|
+        rs = sh.id
       end
-      expect(rs).to eq 'local'
+      expect(rs).to be
     end
 
     context "and spawn script" do
@@ -31,13 +31,13 @@ describe Vx::ContainerConnector::Local do
         rs   = ""
         code = nil
 
-        conn.start do |spawner|
-          code = spawner.spawn("echo $PWD") do |out|
+        conn.start do |sh|
+          code = sh.exec("pwd") do |out|
             rs << out
           end
         end
 
-        dir = "#{Dir.tmpdir}/.vx_local_connector\n"
+        dir = "#{Dir.tmpdir}/vx_lib_container_#{Process.pid}\n"
         if RUBY_PLATFORM =~ /darwin/
           dir.gsub!(/^\/var/, '/private/var')
         end
@@ -49,8 +49,8 @@ describe Vx::ContainerConnector::Local do
       it "failed" do
         code = nil
         rs   = ""
-        conn.start do |spawner|
-          code = spawner.spawn('ls /notexists') do |out|
+        conn.start do |sh|
+          code = sh.exec('ls /notexists') do |out|
             rs << out
           end
         end
