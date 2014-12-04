@@ -13,7 +13,7 @@ module Vx
           def exec(script, &logger)
             Dir.chdir work_dir do
               sh.exec upload(script, "~/build.sh", mode: '0755')
-              sh.exec("~/build.sh", &logger)
+              sh.exec("~/build.sh", home: work_dir, &logger)
             end
           end
 
