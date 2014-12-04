@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 class TestRetriable
-  include Vx::ContainerConnector::Retriable
+  include Vx::Lib::Container::Retriable
 
   class Error < Exception ; end
 end
 
-describe Vx::ContainerConnector::Retriable do
+describe Vx::Lib::Container::Retriable do
   let(:proxy) { TestRetriable.new }
 
   it "should rescue 2 times" do
