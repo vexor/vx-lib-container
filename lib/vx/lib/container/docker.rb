@@ -73,9 +73,12 @@ module Vx
           end
 
           def start_container(&block)
-            container = instrument("create", container_type: "docker", container_options: create_container_options) do
-              ::Docker::Container.create create_container_options
-            end
+            container =
+              with_retries ::Docker::Error::TimeoutError, limit: 5, sleep: 3 do
+                instrument("create", container_type: "docker", container_options: create_container_options) do
+                  ::Docker::Container.create create_container_options
+                end
+              end
 
             instrumentation = {
               container_type: "docker",
