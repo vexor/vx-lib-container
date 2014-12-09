@@ -5,8 +5,6 @@ module Vx ; module Lib ; module Container ;
 
   class Local
 
-    include Lib::Container::Instrument
-
     autoload :Spawner, File.expand_path("../local/spawner", __FILE__)
 
     attr_reader :work_dir
