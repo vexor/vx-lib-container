@@ -17,18 +17,14 @@ module Vx ; module Lib ; module Container ;
     end
 
     def start(&block)
-      instrument( "create", container_type: 'local', container: { work_dir: work_dir }) do
-        FileUtils.rm_rf(work_dir)
-        FileUtils.mkdir_p(work_dir)
-      end
+      FileUtils.rm_rf(work_dir)
+      FileUtils.mkdir_p(work_dir)
 
       begin
         spawner = Spawner.new(work_dir)
         yield spawner
       ensure
-        instrument( "kill", container_type: 'local', container: { work_dir: work_dir }) do
-          FileUtils.mkdir_p(work_dir)
-        end
+        FileUtils.mkdir_p(work_dir)
       end
     end
 

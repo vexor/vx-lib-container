@@ -14,7 +14,6 @@ module Vx
 
         include Lib::Shell
         include Lib::Container::Retriable
-        include Lib::Container::Instrument
 
         attr_reader :user, :password, :init, :image, :remote_dir, :memory, :memory_swap
 
@@ -55,16 +54,8 @@ module Vx
               timeout:       3,
             }
 
-            instrumentation = {
-              container_type: "docker",
-              container:      container.json,
-              ssh_options:    ssh_options.merge(host: host, user: user)
-            }
-
             ssh = with_retries ::Net::SSH::AuthenticationFailed, ::Errno::ECONNREFUSED, ::Errno::ETIMEDOUT, ::Timeout::Error, limit: 5, sleep: 3 do
-              instrument("start_ssh_session", instrumentation) do
-                ::Net::SSH.start host, user, ssh_options
-              end
+              ::Net::SSH.start host, user, ssh_options
             end
 
             re = yield Spawner.new(container, ssh)
@@ -75,27 +66,16 @@ module Vx
           def start_container(&block)
             container =
               with_retries ::Docker::Error::TimeoutError, limit: 5, sleep: 3 do
-                instrument("create", container_type: "docker", container_options: create_container_options) do
-                  ::Docker::Container.create create_container_options
-                end
+                ::Docker::Container.create create_container_options
               end
 
-            instrumentation = {
-              container_type: "docker",
-              container:      container.json
-            }
-
-            instrument("start", instrumentation) do
-              container.start
-            end
+            container.start
 
             begin
               yield container
             ensure
-              instrument("kill", instrumentation) do
-                container.kill
-                container.remove
-              end
+              container.kill
+              container.remove
             end
           end
 
