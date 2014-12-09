@@ -22,6 +22,10 @@ module Vx ; module Lib ; module Container ;
         container.id
       end
 
+      def properties
+        container.json
+      end
+
     end
   end
 

@@ -21,6 +21,10 @@ module Vx
             work_dir
           end
 
+          def properties
+            {}
+          end
+
         end
       end
     end
