@@ -65,7 +65,7 @@ module Vx
 
           def start_container(&block)
             container =
-              with_retries ::Docker::Error::TimeoutError, limit: 5, sleep: 3 do
+              with_retries ::Excon::Errors::SocketError, ::Docker::Error::TimeoutError, limit: 5, sleep: 3 do
                 ::Docker::Container.create create_container_options
               end
 
