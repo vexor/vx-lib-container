@@ -18,12 +18,13 @@ module Vx
         attr_reader :user, :password, :init, :image, :remote_dir, :memory, :memory_swap
 
         def initialize(options = {})
-          @user        = options[:user]        || "vexor"
-          @password    = options[:password]    || "vexor"
-          @init        = options[:init]        || %w{ /sbin/my_init }
-          @image       = options[:image]       || "vexor/trusty:2.0.1"
-          @memory      = options[:memory].to_i
-          @memory_swap = options[:memory_swap].to_i
+          @user           = options[:user]        || "vexor"
+          @password       = options[:password]    || "vexor"
+          @init           = options[:init]        || %w{ /sbin/my_init }
+          @image          = options[:image]       || "vexor/trusty:2.0.1"
+          @memory         = options[:memory].to_i
+          @memory_swap    = options[:memory_swap].to_i
+          @container_opts = options[:container_opts] || {}
         end
 
         def start(&block)
@@ -66,7 +67,7 @@ module Vx
           def start_container(&block)
             container =
               with_retries ::Excon::Errors::SocketError, ::Docker::Error::TimeoutError, limit: 5, sleep: 3 do
-                ::Docker::Container.create create_container_options
+                ::Docker::Container.create create_container_options.merge(@container_opts)
               end
 
             container.start
