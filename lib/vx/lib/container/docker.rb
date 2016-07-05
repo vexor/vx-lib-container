@@ -21,7 +21,7 @@ module Vx
           @user           = options[:user]        || "vexor"
           @password       = options[:password]    || "vexor"
           @init           = options[:init]        || %w{ /sbin/my_init }
-          @image          = options[:image]       || "vexor/trusty:2.0.1"
+          @image          = options[:image]       || "quay.io/dmexe/trusty:2.0.18.3"
           @memory         = options[:memory].to_i
           @memory_swap    = options[:memory_swap].to_i
           @container_opts = options[:container_opts] || {}

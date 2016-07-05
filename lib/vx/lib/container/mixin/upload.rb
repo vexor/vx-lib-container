@@ -6,7 +6,7 @@ module Vx ; module Lib ; module Container
     def upload(content, path, options = {})
       mode = options[:mode] || '0600'
       encoded = ::Base64.encode64(content).gsub("\n", '')
-      "( echo #{encoded} | base64 --decode ) > #{path} ; chmod #{mode} #{path}"
+      "( echo #{encoded} | base64 -d ) > #{path} ; chmod #{mode} #{path}"
     end
   end
 

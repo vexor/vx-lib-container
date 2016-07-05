@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_runtime_dependency 'docker-api',   '= 1.16.1'
+  spec.add_runtime_dependency 'docker-api',   '= 1.29.0'
   spec.add_runtime_dependency 'vx-lib-shell', '= 0.1.4'
 
   spec.add_development_dependency "bundler", "~> 1.3"
