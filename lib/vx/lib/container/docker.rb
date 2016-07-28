@@ -35,10 +35,10 @@ module Vx
 
         def create_container_options
           @create_container_options ||= {
-            'Cmd'        => init,
             'Image'      => image,
-            'Memory'     => memory,
-            'MemorySwap' => memory_swap
+            # 'Memory'     => memory,
+            # 'MemorySwap' => memory_swap,
+            'Cmd'        => init,
           }
         end
 
