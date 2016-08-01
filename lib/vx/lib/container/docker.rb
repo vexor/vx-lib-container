@@ -88,7 +88,6 @@ module Vx
           def start_container(&block)
             container =
               with_retries ::Excon::Errors::SocketError, ::Docker::Error::TimeoutError, limit: 5, sleep: 3 do
-              byebug
                 ::Docker::Container.create create_container_options.merge(@container_opts)
               end
 
