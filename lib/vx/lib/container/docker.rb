@@ -40,6 +40,9 @@ module Vx
         def create_container_options
           @create_container_options ||= {
             'Image'      => image,
+            'Labels'     => {
+              "com.vexor.role" => "job"
+            },
             'CpuPercent' => cpu_percent,
             'ShmSize'    => shm_size,
             # 'Memory'     => memory,
